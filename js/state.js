@@ -1,3 +1,8 @@
+// Raw localStorage throws in private browsing, where the object exists but
+// every access raises. These wrappers return a fallback instead. Storage
+// keys and formats are unchanged, so existing saved data still loads.
+import { safeSet } from './neorgon-persist.js';
+
 const STORAGE_KEY = 'failsafe-v1';
 
 export const state = {
@@ -18,7 +23,7 @@ export function loadSaved(s) {
 }
 
 export function save(s) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ protocols: s.protocols }));
+  safeSet(STORAGE_KEY, JSON.stringify({ protocols: s.protocols }));
 }
 
 export function getProtocol(s) {
